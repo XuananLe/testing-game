@@ -42,6 +42,10 @@ RED_SPACESHIP = pygame.transform.rotate(RED_SPACESHIP,-90)
 SPACE = pygame.image.load(os.path.join('Assets','space.png'))
 SPACE = pygame.transform.scale(SPACE, (900,900))
 
+#tao ra sound cho bullet
+BULLET_HIT_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Grenade+1.mp3'))
+BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join('Assets','Gun+Silencer.mp3'))
+
 def draw_window(red, yellow, red_bullets, yellow_bullets, RED_HEALTH, YELLOW_HEALTH):
     #blit use to draw surface into the window
     WIN.blit(SPACE, (0,0))
@@ -65,9 +69,11 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, RED_HEALTH, YELLOW_HEA
 
 #yellow ben trai, red ben phai, xu li di chuyen voi 2 ben
 def draw_winner(text):
-    winner_text = HEALTH_FONT.render(text, 1, WHITE)
-    WIN.blit(winner_text, ())
+    WIN.blit(SPACE, (0,0))
+    winner_text = HEALTH_FONT.render(text + "WIN DCMM HAY VCL DIT ME PYTHON, M NGHI ROTATE DE A", 1, WHITE)
+    WIN.blit(winner_text, (450 - winner_text.get_width() / 2, 450 - winner_text.get_height()))
     pygame.display.update()
+    pygame.time.delay(5000)
 
 
 def handle_red(key_pressed, red):
@@ -110,9 +116,9 @@ def handleBullets(red_bullets, yellow_bullets,red,yellow):
 
 
 def main():
-    RED_HEALTH = 100
-    YELLOW_HEALTH = 100
-    winner = ""
+    RED_HEALTH = 10
+    YELLOW_HEALTH = 10
+    winne_text = ""
     clock = pygame.time.Clock()
     #kha nang cao la de initialized spaceship pos, giong nhu class
     yellow = pygame.Rect(0,450, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
@@ -137,24 +143,29 @@ def main():
                     bullet = pygame.Rect(yellow.x + yellow.width - 3,yellow.y + yellow.height/2 -2,
                     10,5)
                     yellow_bullets.append(bullet)
+                    BULLET_FIRE_SOUND.play()
                 if event.key == pygame.K_m and len(red_bullets) < MAX_BULLETS_AT_A_TIME:
                     bullet = pygame.Rect(red.x, red.y + red.height/2 -2,
                     10,5)
                     red_bullets.append(bullet)
+                    BULLET_FIRE_SOUND.play()
             #neu nhu == red_hit thi tru 1 health ?? dell hieu kieu j
+            winner_text = ""
             if event.type == RED_HIT:
                 RED_HEALTH -= 1
+                BULLET_HIT_SOUND.play()
             if event.type == YELLOW_HIT:
                 YELLOW_HEALTH -=1 
-            winner_text = ""
+                BULLET_HIT_SOUND.play()
             if YELLOW_HEALTH <= 0:
                 winner_text = "RED"
             if RED_HEALTH <= 0:
                 winner_text = "YELLOW"
+            if winner_text != "":
+                run = False
         handleBullets(red_bullets, yellow_bullets,red,yellow)
         draw_window(red,yellow,red_bullets,yellow_bullets,RED_HEALTH, YELLOW_HEALTH) 
+    draw_winner(winner_text)
     pygame.quit()
-   
-
 if __name__ == "__main__":
     main()
