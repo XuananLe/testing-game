@@ -70,7 +70,7 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, RED_HEALTH, YELLOW_HEA
 #yellow ben trai, red ben phai, xu li di chuyen voi 2 ben
 def draw_winner(text):
     WIN.blit(SPACE, (0,0))
-    winner_text = HEALTH_FONT.render(text + "WIN DCMM HAY VCL DIT ME PYTHON, M NGHI ROTATE DE A", 1, WHITE)
+    winner_text = HEALTH_FONT.render(text + "WIN", 1, WHITE)
     WIN.blit(winner_text, (450 - winner_text.get_width() / 2, 450 - winner_text.get_height()))
     pygame.display.update()
     pygame.time.delay(5000)
